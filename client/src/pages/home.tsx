@@ -247,7 +247,7 @@ export default function Home() {
                   🐾
                 </motion.div>
                 <p className="text-gray-600">
-                  Seninle kısa bir röportaj yapmak istiyorum!
+                  Zamanın var ise 5 dk röportaj yapabilir miyiz?
                 </p>
               </div>
 
