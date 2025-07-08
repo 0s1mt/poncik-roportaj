@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calendar, Clock, User, MapPin } from "lucide-react";
+import { useLocation } from "wouter";
 
 export default function Schedule() {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ export default function Schedule() {
     location: ""
   });
   const [showConfetti, setShowConfetti] = useState(false);
+  const [, setLocation] = useLocation();
 
   // Create confetti particles
   const createConfetti = () => {
@@ -68,6 +70,11 @@ export default function Schedule() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setShowConfetti(true);
+    
+    // Navigate to thank you page after a short delay
+    setTimeout(() => {
+      setLocation("/thank-you");
+    }, 1500);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -281,12 +288,12 @@ export default function Schedule() {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-6 text-center"
                 >
-                  <div className="text-6xl mb-4">😊</div>
+                  <div className="text-6xl mb-4">📝</div>
                   <p className="text-gray-700 font-medium text-lg">
-                    Teşekkür ederiz!
+                    Kaydediliyor...
                   </p>
                   <p className="text-gray-600 text-sm">
-                    Bilgileriniz kaydedildi, yakında iletişime geçeceğiz
+                    Teşekkür sayfasına yönlendiriliyorsunuz
                   </p>
                 </motion.div>
               )}
