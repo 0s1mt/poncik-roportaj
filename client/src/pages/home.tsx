@@ -2,12 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useLocation } from "wouter";
 
 export default function Home() {
   const [noButtonPosition, setNoButtonPosition] = useState({ x: 0, y: 0 });
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isMoving, setIsMoving] = useState(false);
+  const [, setLocation] = useLocation();
 
   // Get random position for the moving button
   const getRandomPosition = useCallback(() => {
@@ -71,7 +71,7 @@ export default function Home() {
   }, [noButtonPosition, moveNoButton]);
 
   const handleYesClick = () => {
-    setShowSuccessModal(true);
+    setLocation("/schedule");
   };
 
   const handleNoClick = (e: React.MouseEvent) => {
@@ -118,34 +118,34 @@ export default function Home() {
         >
           <Card className="question-container rounded-3xl shadow-2xl max-w-md w-full relative">
             <CardContent className="p-8 md:p-12 text-center">
-              {/* Decorative emojis */}
+              {/* Cute animal emojis */}
               <motion.div
                 className="absolute -top-4 -left-4 text-3xl"
                 animate={{ rotate: [0, 10, -10, 0] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                💝
+                🐱
               </motion.div>
               <motion.div
                 className="absolute -top-4 -right-4 text-3xl"
                 animate={{ rotate: [0, -10, 10, 0] }}
                 transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
               >
-                🌸
+                🐰
               </motion.div>
               <motion.div
                 className="absolute -bottom-4 -left-4 text-3xl"
                 animate={{ rotate: [0, 10, -10, 0] }}
                 transition={{ duration: 2, repeat: Infinity, delay: 1 }}
               >
-                ✨
+                🐶
               </motion.div>
               <motion.div
                 className="absolute -bottom-4 -right-4 text-3xl"
                 animate={{ rotate: [0, -10, 10, 0] }}
                 transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}
               >
-                💖
+                🐭
               </motion.div>
               
               {/* Question text */}
@@ -162,7 +162,7 @@ export default function Home() {
                   animate={{ y: [0, -10, 0] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  🎤
+                  🐾
                 </motion.div>
                 <p className="text-gray-600">
                   Seninle kısa bir röportaj yapmak istiyorum!
@@ -216,30 +216,7 @@ export default function Home() {
         </motion.div>
       </motion.div>
 
-      {/* Success modal */}
-      <AnimatePresence>
-        {showSuccessModal && (
-          <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
-            <DialogContent className="rounded-3xl max-w-sm text-center">
-              <DialogHeader>
-                <div className="text-6xl mb-4">🎉</div>
-                <DialogTitle className="text-2xl font-bold text-gray-800 mb-4">
-                  Harika!
-                </DialogTitle>
-              </DialogHeader>
-              <p className="text-gray-600 mb-6">
-                Röportaj için teşekkürler! Yakında iletişime geçeceğim.
-              </p>
-              <Button
-                onClick={() => setShowSuccessModal(false)}
-                className="bg-gradient-to-r from-pink-500 to-purple-400 text-white font-semibold py-3 px-6 rounded-full hover:shadow-lg"
-              >
-                Kapat
-              </Button>
-            </DialogContent>
-          </Dialog>
-        )}
-      </AnimatePresence>
+
     </div>
   );
 }

@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@300;400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@300;400;500&display=swap');
 
 :root {
   --background: hsl(0, 0%, 100%);
@@ -63,22 +63,65 @@
 
 @layer components {
   .gradient-bg {
-    background: linear-gradient(135deg, hsl(330, 100%, 97%) 0%, hsl(206, 100%, 97%) 50%, hsl(240, 67%, 94%) 100%);
+    background: linear-gradient(135deg, 
+      hsl(330, 100%, 95%) 0%, 
+      hsl(290, 100%, 95%) 20%, 
+      hsl(250, 100%, 95%) 40%, 
+      hsl(210, 100%, 95%) 60%, 
+      hsl(180, 100%, 95%) 80%, 
+      hsl(150, 100%, 95%) 100%);
     min-height: 100vh;
+    position: relative;
+  }
+  
+  .gradient-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 20%, rgba(255, 192, 203, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 40% 70%, rgba(255, 218, 185, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 70% 30%, rgba(255, 228, 225, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 90% 10%, rgba(255, 240, 245, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 10% 90%, rgba(255, 182, 193, 0.3) 0%, transparent 50%);
+    pointer-events: none;
   }
   
   .particle {
     position: absolute;
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     background: radial-gradient(circle, hsl(330, 100%, 71%), hsl(351, 100%, 86%));
     border-radius: 50%;
+    opacity: 0.8;
   }
   
   .question-container {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.85);
+    border: 2px solid rgba(255, 192, 203, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cute-emoji {
+    display: inline-block;
+    animation: bounce 2s infinite;
+  }
+  
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+    60% {
+      transform: translateY(-5px);
+    }
   }
 }
 
