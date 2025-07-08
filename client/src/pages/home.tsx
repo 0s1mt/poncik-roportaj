@@ -7,6 +7,7 @@ import { useLocation } from "wouter";
 export default function Home() {
   const [noButtonPosition, setNoButtonPosition] = useState({ x: 0, y: 0 });
   const [isMoving, setIsMoving] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
   const [, setLocation] = useLocation();
 
   // Get random position for the moving button
@@ -15,27 +16,27 @@ export default function Home() {
     const windowHeight = window.innerHeight;
     const buttonWidth = 120; // Approximate button width
     const buttonHeight = 48; // Approximate button height
-    
+
     const maxX = windowWidth - buttonWidth - 40;
     const maxY = windowHeight - buttonHeight - 40;
-    
+
     const x = Math.random() * maxX;
     const y = Math.random() * maxY;
-    
-    return { 
-      x: Math.max(20, x), 
-      y: Math.max(20, y) 
+
+    return {
+      x: Math.max(20, x),
+      y: Math.max(20, y),
     };
   }, []);
 
   // Move the no button to a random position
   const moveNoButton = useCallback(() => {
     if (isMoving) return;
-    
+
     setIsMoving(true);
     const position = getRandomPosition();
     setNoButtonPosition(position);
-    
+
     setTimeout(() => {
       setIsMoving(false);
     }, 500);
@@ -58,20 +59,80 @@ export default function Home() {
     const handleResize = () => {
       const rect = {
         right: noButtonPosition.x + 120,
-        bottom: noButtonPosition.y + 48
+        bottom: noButtonPosition.y + 48,
       };
-      
+
       if (rect.right > window.innerWidth || rect.bottom > window.innerHeight) {
         moveNoButton();
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [noButtonPosition, moveNoButton]);
 
+  // Create confetti particles
+  const createConfetti = () => {
+    const confettiCount = 50;
+    const confetti = [];
+    
+    for (let i = 0; i < confettiCount; i++) {
+      confetti.push({
+        id: i,
+        x: Math.random() * window.innerWidth,
+        y: -10,
+        color: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7'][Math.floor(Math.random() * 7)],
+        size: Math.random() * 8 + 4,
+        speedX: (Math.random() - 0.5) * 6,
+        speedY: Math.random() * 3 + 2,
+        rotation: Math.random() * 360,
+        rotationSpeed: (Math.random() - 0.5) * 8
+      });
+    }
+    
+    return confetti;
+  };
+
+  const [confetti, setConfetti] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (showConfetti) {
+      setConfetti(createConfetti());
+      
+      const interval = setInterval(() => {
+        setConfetti(prev => prev.map(particle => ({
+          ...particle,
+          x: particle.x + particle.speedX,
+          y: particle.y + particle.speedY,
+          rotation: particle.rotation + particle.rotationSpeed
+        })).filter(particle => particle.y < window.innerHeight + 20));
+      }, 16);
+
+      const timeout = setTimeout(() => {
+        setShowConfetti(false);
+        setConfetti([]);
+      }, 3000);
+
+      return () => {
+        clearInterval(interval);
+        clearTimeout(timeout);
+      };
+    }
+  }, [showConfetti]);
+
   const handleYesClick = () => {
-    setLocation("/schedule");
+    // Show confetti animation
+    setShowConfetti(true);
+    
+    // Open email in new tab
+    setTimeout(() => {
+      window.open("mailto:info@example.com?subject=Röportaj%20Talebi&body=Merhaba,%0D%0A%0D%0ARöportaj%20için%20müsait%20olduğumu%20bildirmek%20istiyorum.%0D%0A%0D%0ATeşekkürler.", "_blank");
+    }, 500);
+    
+    // Navigate to schedule page after a short delay
+    setTimeout(() => {
+      setLocation("/schedule");
+    }, 2000);
   };
 
   const handleNoClick = (e: React.MouseEvent) => {
@@ -85,6 +146,32 @@ export default function Home() {
 
   return (
     <div className="gradient-bg min-h-screen overflow-hidden relative">
+      {/* Confetti Animation */}
+      <AnimatePresence>
+        {showConfetti && (
+          <div className="fixed inset-0 pointer-events-none z-50">
+            {confetti.map((particle) => (
+              <motion.div
+                key={particle.id}
+                className="absolute"
+                style={{
+                  left: particle.x,
+                  top: particle.y,
+                  width: particle.size,
+                  height: particle.size,
+                  backgroundColor: particle.color,
+                  borderRadius: '50%',
+                  transform: `rotate(${particle.rotation}deg)`
+                }}
+                initial={{ opacity: 1, scale: 1 }}
+                animate={{ opacity: 0.8, scale: 0.8 }}
+                exit={{ opacity: 0, scale: 0 }}
+              />
+            ))}
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* Floating particles background */}
       <div className="fixed inset-0 pointer-events-none">
         {[...Array(6)].map((_, i) => (
@@ -147,17 +234,17 @@ export default function Home() {
               >
                 🐭
               </motion.div>
-              
+
               {/* Question text */}
               <div className="mb-8">
-                <motion.h1 
+                <motion.h1
                   className="text-2xl md:text-3xl font-bold text-gray-800 mb-4"
                   animate={{ opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 3, repeat: Infinity }}
                 >
                   Röportaj için müsait misin?
                 </motion.h1>
-                <motion.div 
+                <motion.div
                   className="text-6xl mb-4"
                   animate={{ y: [0, -10, 0] }}
                   transition={{ duration: 2, repeat: Infinity }}
@@ -215,8 +302,6 @@ export default function Home() {
           </Button>
         </motion.div>
       </motion.div>
-
-
     </div>
   );
 }
