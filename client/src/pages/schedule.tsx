@@ -281,12 +281,12 @@ export default function Schedule() {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-6 text-center"
                 >
-                  <div className="text-4xl mb-2">🎊</div>
-                  <p className="text-gray-700 font-medium">
-                    Başarıyla kaydedildi!
+                  <div className="text-6xl mb-4">😊</div>
+                  <p className="text-gray-700 font-medium text-lg">
+                    Teşekkür ederiz!
                   </p>
                   <p className="text-gray-600 text-sm">
-                    Yakında size ulaşacağım
+                    Bilgileriniz kaydedildi, yakında iletişime geçeceğiz
                   </p>
                 </motion.div>
               )}

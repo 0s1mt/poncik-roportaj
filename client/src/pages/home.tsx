@@ -124,15 +124,10 @@ export default function Home() {
     // Show confetti animation
     setShowConfetti(true);
     
-    // Open email in new tab
-    setTimeout(() => {
-      window.open("mailto:info@example.com?subject=Röportaj%20Talebi&body=Merhaba,%0D%0A%0D%0ARöportaj%20için%20müsait%20olduğumu%20bildirmek%20istiyorum.%0D%0A%0D%0ATeşekkürler.", "_blank");
-    }, 500);
-    
     // Navigate to schedule page after a short delay
     setTimeout(() => {
       setLocation("/schedule");
-    }, 2000);
+    }, 1500);
   };
 
   const handleNoClick = (e: React.MouseEvent) => {
